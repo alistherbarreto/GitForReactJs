@@ -2,6 +2,7 @@ import React,{ Component } from 'react';
 //import logo from './logo.svg';
 import './App.css';
 import {CardList} from './components/card-list/card-list.component';
+import {SearchBox} from './components/search-box/search-box.component';
 
 class App extends Component {
   constructor () {
@@ -14,8 +15,11 @@ class App extends Component {
       std1 : 1
     };*/
     this.state = {
-      pokedex : []
+      pokedex : [],
+      searchField : ''
     }
+
+    this.handelChange = this.handelChange.bind(this)
   }
 
   componentDidMount () {
@@ -23,47 +27,23 @@ class App extends Component {
     .then(response => response.json())
     .then(users => this.setState({ pokedex : users}));
   }
+
+  handelChange = (e) => {
+    this.setState({searchField : e.target.value}) 
+  }
   render() {
+    const {pokedex,searchField} = this.state;
+    const filteredPokedex = pokedex.filter(pokedex =>
+    pokedex.name.toLowerCase().includes(searchField.toLowerCase())  
+    )
+
     return (
       <div className="App">
-         {/*
-         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-        <p>{this.state.string} {this.state.std}</p>
-        <p>{this.state.string} {this.state.std1}</p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          <button onClick={() => this.setState({
-            std : this.state.std+1
-            })
-          }> Change State </button>
-          <button onClick={() => this.setState({
-            std1 : this.state.std1+1
-            })
-          }> Change State </button>
-        </header>
-        */
-        }
-        {/*
-          this.state.pokedex.map(
-          pokedex => <div key={pokedex.id}><p> {pokedex.name}</p></div>
-          )
-          */}
-          {
-          /*this.state.pokedex.map(
-          pokedex => <CardList key={pokedex.id} name={pokedex.name}></CardList>
-          )
-          */}
-          <CardList pokedex={this.state.pokedex}>
+          <SearchBox
+          placeholder="Search for Pokemon"
+          handelChange={this.handelChange}
+          />
+          <CardList pokedex={filteredPokedex}>
           </CardList>
       </div>
     );
