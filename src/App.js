@@ -31,6 +31,14 @@ class App extends Component {
   handelChange = (e) => {
     this.setState({searchField : e.target.value}) 
   }
+
+  handelClick = () => {
+    //used to take care of quick updates
+    this.setState((prevState, prevProps) => {
+      return { meaning : prevState.meaning + prevProps.increment}
+    })
+  }
+
   render() {
     const {pokedex,searchField} = this.state;
     const filteredPokedex = pokedex.filter(pokedex =>
@@ -39,6 +47,7 @@ class App extends Component {
 
     return (
       <div className="App">
+         <h1>Welcome to the monster Pokedex</h1>
           <SearchBox
           placeholder="Search for Pokemon"
           handelChange={this.handelChange}
